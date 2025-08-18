@@ -1,0 +1,20 @@
+{
+  "name": "n8n-nodes-fullfunnel",
+  "version": "1.0.0",
+  "main": "dist/FullFunnel.node.js",
+  "scripts": {
+    "build": "tsc && n8n-node-dev build --assets"
+  },
+  "n8n": {
+    "nodes": [
+      "dist/FullFunnel.node.js"
+    ],
+    "assets": [
+      "funil.svg"
+    ]
+  },
+  "devDependencies": {
+    "n8n-node-dev": "^0.0.1",
+    "typescript": "^5.0.0"
+  }
+}
