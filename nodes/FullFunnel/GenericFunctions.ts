@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+import type { ToISOTimeOptions } from 'luxon';
 import type {
 	DeclarativeRestApiSettings,
 	IDataObject,
@@ -5,20 +7,17 @@ import type {
 	IExecutePaginationFunctions,
 	IExecuteSingleFunctions,
 	IHookFunctions,
+	IHttpRequestMethods,
 	IHttpRequestOptions,
 	ILoadOptionsFunctions,
 	IN8nHttpFullResponse,
 	INodeExecutionData,
 	INodePropertyOptions,
 	IPollFunctions,
+	IRequestOptions,
 	IWebhookFunctions,
 } from 'n8n-workflow';
 import { NodeApiError } from 'n8n-workflow';
-
-import type { OptionsWithUri } from 'request';
-
-import type { ToISOTimeOptions } from 'luxon';
-import { DateTime } from 'luxon';
 
 const VALID_EMAIL_REGEX =
 	/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -131,14 +130,14 @@ export async function highLevelApiRequest(
 		| IPollFunctions
 		| IHookFunctions
 		| ILoadOptionsFunctions,
-	method: string,
+	method: IHttpRequestMethods,
 	resource: string,
 	body: IDataObject = {},
 	qs: IDataObject = {},
 	uri?: string,
 	option: IDataObject = {},
 ) {
-	let options: OptionsWithUri = {
+	let options: IRequestOptions = {
 		method,
 		body,
 		qs,
@@ -152,7 +151,7 @@ export async function highLevelApiRequest(
 		delete options.qs;
 	}
 	options = Object.assign({}, options, option);
-	return this.helpers.requestWithAuthentication.call(this, 'highLevelApi', options);
+	return await this.helpers.requestWithAuthentication.call(this, 'highLevelApi', options);
 }
 
 export async function opportunityUpdatePreSendAction(
@@ -184,7 +183,8 @@ export async function taskUpdatePreSendAction(
 		const responseData = await highLevelApiRequest.call(this, 'GET', resource);
 		body.title = body.title || responseData.title;
 		// the api response dueDate has to be formatted or it will error on update
-		//body.dueDate = body.dueDate || dateToIsoSupressMillis(responseData.dueDate);
+		const dueDateValue = typeof responseData.dueDate === 'string' ? dateToIsoSupressMillis(responseData.dueDate) : undefined;
+		body.dueDate = body.dueDate || (dueDateValue === null ? undefined : dueDateValue);
 		requestOptions.body = body;
 	}
 	return requestOptions;

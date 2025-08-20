@@ -152,8 +152,7 @@ const createProperties: INodeProperties[] = [
 		name: 'stageId',
 		type: 'options',
 		required: true,
-		description:
-			'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 		displayOptions: {
 			show: {
 				resource: ['opportunity'],
@@ -395,9 +394,9 @@ const getAllProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 100,
+
 		},
-		default: 20,
+		default: 50,
 		routing: {
 			send: {
 				type: 'query',
@@ -463,6 +462,20 @@ const getAllProperties: INodeProperties[] = [
 					},
 				},
 			},
+			{
+				displayName: 'Query',
+				name: 'query',
+				type: 'string',
+				default: '',
+				description:
+					'Query will search on these fields: Name, Phone, Email, Tags, and Company Name',
+				routing: {
+					send: {
+						type: 'query',
+						property: 'query',
+					},
+				},
+			},
 			// api should filter by monetary value but doesn't
 			// {
 			// 	displayName: 'Monetary Value',
@@ -481,8 +494,7 @@ const getAllProperties: INodeProperties[] = [
 				name: 'stageId',
 				type: 'options',
 				default: '',
-				description:
-					'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 				typeOptions: {
 					loadOptionsDependsOn: ['pipelineId'],
 					loadOptionsMethod: 'getPipelineStages',
@@ -537,20 +549,7 @@ const getAllProperties: INodeProperties[] = [
 					},
 				},
 			},
-			{
-				displayName: 'Query',
-				name: 'query',
-				type: 'string',
-				default: '',
-				description:
-					'Query will search on these fields: Name, Phone, Email, Tags, and Company Name',
-				routing: {
-					send: {
-						type: 'query',
-						property: 'query',
-					},
-				},
-			},
+			
 		],
 	},
 ];
@@ -658,8 +657,7 @@ const updateProperties: INodeProperties[] = [
 				name: 'stageId',
 				type: 'options',
 				default: '',
-				description:
-					'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 				typeOptions: {
 					loadOptionsDependsOn: ['pipelineId'],
 					loadOptionsMethod: 'getPipelineStages',
@@ -702,18 +700,6 @@ const updateProperties: INodeProperties[] = [
 				},
 			},
 			{
-				displayName: 'Title',
-				name: 'title',
-				type: 'string',
-				default: '',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'title',
-					},
-				},
-			},
-			{
 				displayName: 'Tags',
 				name: 'tags',
 				type: 'string',
@@ -726,6 +712,19 @@ const updateProperties: INodeProperties[] = [
 					},
 				},
 			},
+			{
+				displayName: 'Title',
+				name: 'title',
+				type: 'string',
+				default: '',
+				routing: {
+					send: {
+						type: 'body',
+						property: 'title',
+					},
+				},
+			},
+			
 		],
 	},
 ];

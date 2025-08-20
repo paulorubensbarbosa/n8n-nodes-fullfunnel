@@ -1,4 +1,10 @@
-import type { INodeProperties, INodeType, INodeTypeDescription } from 'n8n-workflow';
+import type {
+	INodeProperties,
+	INodeType,
+	INodeTypeBaseDescription,
+	INodeTypeDescription,
+} from 'n8n-workflow';
+import { NodeConnectionType } from 'n8n-workflow';
 
 import { contactFields, contactNotes, contactOperations } from './description/ContactDescription';
 import { opportunityFields, opportunityOperations } from './description/OpportunityDescription';
@@ -10,78 +16,87 @@ import {
 	highLevelApiPagination,
 } from './GenericFunctions';
 
-const ressources: INodeProperties[] = [
-    {
-        displayName: 'Resource',
-        name: 'resource',
-        type: 'options',
-        noDataExpression: true,
-        options: [
-            {
-                name: 'Contact',
-                value: 'contact',
-            },
-            {
-                name: 'Opportunity',
-                value: 'opportunity',
-            },
-            {
-                name: 'Task',
-                value: 'task',
-            },
-        ],
-        default: 'contact',
-        required: true,
-    },
+const resources: INodeProperties[] = [
+	{
+		displayName: 'Resource',
+		name: 'resource',
+		type: 'options',
+		noDataExpression: true,
+		options: [
+			{
+				name: 'Contact',
+				value: 'contact',
+			},
+			{
+				name: 'Opportunity',
+				value: 'opportunity',
+			},
+			{
+				name: 'Task',
+				value: 'task',
+			},
+		],
+		default: 'contact',
+		required: true,
+	},
 ];
 
-export class FullFunnel implements INodeType {
-    description: INodeTypeDescription = {
-        displayName: 'FullFunnel',
-        name: 'fullfunnel',
-        icon: 'file:funil.svg',
-        group: ['transform'],
-        version: 1,
-        description: 'Consume FullFunnel API',
-        subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-        defaults: {
-            name: 'FullFunnel',
-        },
-        inputs: ['main'],
-        outputs: ['main'],
-        credentials: [
-            {
-                name: 'fullFunnelApi',
-                required: true,
-            },
-        ],
-        requestDefaults: {
-            baseURL: 'https://rest.gohighlevel.com/v1',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        },
-        requestOperations: {
-            pagination: highLevelApiPagination,
-        },
-        properties: [
-            ...ressources,
-			...contactOperations,
-			...contactNotes,
-			...contactFields,
-			...opportunityOperations,
-			...opportunityFields,
-			...taskOperations,
-			...taskFields,
-        ],
-    };
+const versionDescription: INodeTypeDescription = {
+	displayName: 'FullFunnelv1',
+	name: 'fullFunnel',
+	icon: 'file:funil.svg',
+	group: ['transform'],
+	version: 1,
+	description: 'Consume HighLevel API v1',
+	subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+	defaults: {
+		name: 'FullFunnel',
+	},
+	inputs: [NodeConnectionType.Main],
+	outputs: [NodeConnectionType.Main],
+	credentials: [
+		{
+			name: 'fullFunnelApi',
+			required: true,
+		},
+	],
+	requestDefaults: {
+		baseURL: 'https://rest.gohighlevel.com/v1',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+	},
+	requestOperations: {
+		pagination: highLevelApiPagination,
+	},
+	properties: [
+		...resources,
+		...contactOperations,
+		...contactNotes,
+		...contactFields,
+		...opportunityOperations,
+		...opportunityFields,
+		...taskOperations,
+		...taskFields,
+	],
+};
 
-    methods = {
-        loadOptions: {
-            getPipelineStages,
-            getUsers,
-            getTimezones,
-        }
-    }
+export class FullFunnel implements INodeType {
+	description: INodeTypeDescription;
+
+	constructor(baseDescription: INodeTypeBaseDescription) {
+		this.description = {
+			...baseDescription,
+			...versionDescription,
+		};
+	}
+
+	methods = {
+		loadOptions: {
+			getPipelineStages,
+			getUsers,
+			getTimezones,
+		},
+	};
 }

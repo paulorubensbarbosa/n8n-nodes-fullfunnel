@@ -184,8 +184,7 @@ const createProperties: INodeProperties[] = [
 				name: 'assignedTo',
 				type: 'options',
 				default: '',
-				description:
-					'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 				typeOptions: {
 					loadOptionsMethod: 'getUsers',
 				},
@@ -335,9 +334,9 @@ const getAllProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 100,
+
 		},
-		default: 20,
+		default: 50,
 		routing: {
 			send: {
 				type: 'query',
@@ -395,8 +394,7 @@ const updateProperties: INodeProperties[] = [
 				name: 'assignedTo',
 				type: 'options',
 				default: '',
-				description:
-					'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
+				description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 				typeOptions: {
 					loadOptionsMethod: 'getUsers',
 				},

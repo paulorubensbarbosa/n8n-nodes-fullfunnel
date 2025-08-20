@@ -2,7 +2,7 @@ import type {
 	IAuthenticateGeneric,
 	ICredentialTestRequest,
 	ICredentialType,
-	NodePropertyTypes,
+	INodeProperties,
 } from 'n8n-workflow';
 
 export class FullFunnelApi implements ICredentialType {
@@ -10,13 +10,14 @@ export class FullFunnelApi implements ICredentialType {
 
 	displayName = 'FullFunnel API';
 
-	documentationUrl = 'fullfunnel';
+	documentationUrl = 'https://docs.n8n.io/integrations/custom-api/';
 
-	properties = [
+	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',
 			name: 'apiKey',
-			type: 'string' as NodePropertyTypes,
+			type: 'string',
+			typeOptions: { password: true },
 			default: '',
 		},
 	];
